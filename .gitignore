@@ -1,0 +1,4 @@
+Game
+*.exe
+*.o
+obj/
