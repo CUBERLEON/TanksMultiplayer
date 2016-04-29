@@ -2,7 +2,7 @@
 #define WORLD_HPP
 
 #include <vector>
-#include "IDrawable.hpp"
+#include "sys/IDrawable.hpp"
 
 class Map;
 class Tank;

@@ -42,5 +42,9 @@ void World::update(float time) {
 }
 
 void World::draw(Renderer* renderer) {
-    
+    renderer->draw(m_map);
+    for (unsigned int i = 0; i < m_tanks.size(); ++i)
+        renderer->draw(m_tanks[i]);
+    for (unsigned int i = 0; i < m_bullets.size(); ++i)
+        renderer->draw(m_bullets[i]);
 }

@@ -1,6 +1,6 @@
 #include "Map.hpp"
 
-#include "System.hpp"
+#include "sys/System.hpp"
 #include "Block.hpp"
 #include "Renderer.hpp"
 
@@ -27,5 +27,6 @@ void Map::loadFromFile(const std::string& fileName) {
 }
 
 void Map::draw(Renderer* renderer) {
-    
+    for (unsigned int i = 0; i < m_blocks.size(); ++i)
+        renderer->draw(m_blocks[i]);
 }

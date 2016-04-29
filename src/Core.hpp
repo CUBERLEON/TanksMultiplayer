@@ -2,6 +2,8 @@
 #define CORE_HPP
 
 class Renderer;
+class NetworkManager;
+class World;
 
 class Core {
 public:
@@ -13,12 +15,20 @@ public:
     
     void start();
     void stop();
+    
+    void sync();
 protected:
 private:
     bool m_isRunning;
+    bool m_isHost;
 
     Renderer* m_renderer;
     int m_fpsLimit;
+    
+    NetworkManager* m_nManager;
+    
+    World* m_world;
+    // Interface* m_interface;
     
     void run();
 };

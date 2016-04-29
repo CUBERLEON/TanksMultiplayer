@@ -5,7 +5,9 @@
 #include <vector>
 #include <cstdio>
 #include <sstream>
+#include <SFML/Graphics.hpp>
 #include "Core.hpp"
+#include "Renderer.hpp"
 
 void process_command(std::string text);
 
@@ -39,11 +41,14 @@ void process_command(std::string text) {
         
         if (command == "exit") {
             exit(0);
-        } else if (command == "run") {
+        } else if (command == "create") {
             Core* core = new Core();
+            core->getRenderer()->setWindow(new sf::RenderWindow(sf::VideoMode(800, 600), "Tanks - Host"));
             core->start();
-        } else if (command == "test") {
-            
+        } else if (command == "connect") {
+            Core* core = new Core();
+            core->getRenderer()->setWindow(new sf::RenderWindow(sf::VideoMode(800, 600), "Tanks - Client"));
+            core->start();
         } else if (command == "help") {
             std::cout << "Help is currently not available!" << std::endl;
         } else {

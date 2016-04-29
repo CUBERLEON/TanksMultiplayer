@@ -3,13 +3,19 @@
 #include <chrono>
 #include <thread>
 #include "Renderer.hpp"
-#include "Time.hpp"
-#include "Debug.hpp"
+#include "sys/Time.hpp"
+#include "sys/Debug.hpp"
 #include "Tank.hpp"
+#include "NetworkManager.hpp"
+#include "World.hpp"
+#include "Map.hpp"
+#include "sys/Polygon.hpp"
 
 Core::Core()
-: m_isRunning(false), m_fpsLimit(60)
-{}
+: m_isRunning(false), m_renderer(nullptr), m_fpsLimit(60)
+{
+    m_renderer = new Renderer();
+}
 
 Core::~Core() {
     delete m_renderer;
@@ -22,6 +28,9 @@ Renderer* Core::getRenderer() const {
 void Core::start() {
     if (m_isRunning)
         return;
+        
+    m_world = new World(new Map(100, 70));
+    m_world->addTank(new Tank(new Polygon({{-5, -5}, {5, -5}, {5, 5}, {-5, 5}}), 10, 5));
     
     run();
 }
@@ -31,6 +40,9 @@ void Core::stop() {
         return;
     
     m_isRunning = false;
+    
+    if (m_renderer->isActive())
+        m_renderer->getWindow()->close();
 }
 
 void Core::run() {
@@ -43,30 +55,22 @@ void Core::run() {
 	double prevTime = Time::getTime();
 	double frameTime = 1.0 / (double)m_fpsLimit;
 	double unprocessedTime = 0;
-    
-    // Tank a(10., 20.);
-    // Debug::info("%.2f\n", a.getPosX());
 
 	while (m_isRunning) {
-		// if (m_window->isCloseRequested())
-		// 	stop();
-
 		double curTime = Time::getTime();
 		double passedTime = curTime - prevTime;
 
 		unprocessedTime += passedTime;
 		fpsTime += passedTime;
 
-		bool render = false;
+		bool needUpdate = false;
+        double updateTime = 0.;
 
 		if (unprocessedTime >= frameTime) {
-			double updateTime = frameTime * (int)floor(unprocessedTime / frameTime);
+			updateTime = frameTime * (int)floor(unprocessedTime / frameTime);
 			unprocessedTime -= updateTime;
 
-			render = true;
-
-			// m_scene->input((float)updateTime);
-			// m_scene->update((float)updateTime);
+			needUpdate = true;
 		}
 
 		if (fpsTime >= fpsRefreshTime) {
@@ -75,8 +79,22 @@ void Core::run() {
 			frames = 0;
 		}
 
-		if (render) {
-			// m_renderer->refresh(m_renderingEngine);
+		if (needUpdate) {
+            if (m_renderer->isActive()) {
+                sf::Event event;
+                while (m_renderer->getWindow()->pollEvent(event)) {
+                    if (event.type == sf::Event::Closed)
+                        stop();
+                }
+                
+                m_renderer->clear();
+                
+                m_renderer->draw(m_world);
+                // m_renderer->draw(m_interface);
+                
+                m_renderer->display();
+            }
+            
 			frames++;
 		}
 		else {
@@ -85,4 +103,8 @@ void Core::run() {
         
 		prevTime = curTime;
 	}
+}
+
+void Core::sync() {
+    
 }

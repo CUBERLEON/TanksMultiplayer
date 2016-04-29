@@ -14,16 +14,19 @@ endif
 vpath %.o obj
 vpath %.cpp src
 
-src_game=Main.cpp Map.cpp Tank.cpp Block.cpp BrickBlock.cpp WaterBlock.cpp Polygon.cpp Utils.cpp Core.cpp World.cpp Renderer.cpp Time.cpp Bullet.cpp
+src_sys=Utils.cpp Time.cpp Polygon.cpp
+src_main=Main.cpp Map.cpp Tank.cpp Block.cpp BrickBlock.cpp WaterBlock.cpp Core.cpp World.cpp Renderer.cpp Bullet.cpp
 
-obj_game=$(addprefix obj/,$(src_game:.cpp=.o))
+obj_sys=$(addprefix obj/sys/,$(src_sys:.cpp=.o))
+obj_main=$(addprefix obj/,$(src_main:.cpp=.o))
 
 all: game
 
-game: $(obj_game)
-	$(CC) $(LDFLAGS) $(obj_game) $(LDLIBS) -o tanks_multiplayer
+game: $(obj_main) $(obj_sys)
+	$(CC) $(LDFLAGS) $(obj_main) $(obj_sys) $(LDLIBS) -o tanks_multiplayer
 
 obj/%.o: src/%.cpp
+	@mkdir -p obj/sys
 	@mkdir -p obj
 	$(CXX) -c $(CXXFLAGS) $^ -o $@
 

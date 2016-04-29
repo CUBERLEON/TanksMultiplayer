@@ -4,6 +4,7 @@
 class NetworkManager {
 public:
     NetworkManager();
+    ~NetworkManager();
 protected:
 private:
     

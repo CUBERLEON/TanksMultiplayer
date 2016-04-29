@@ -2,7 +2,7 @@
 
 #include "Utils.hpp"
 
-Polygon::Polygon(const std::vector< std::pair<float, float> > points)
+Polygon::Polygon(const std::vector< std::pair<float, float> >& points)
 : m_points(points)
 {}
 

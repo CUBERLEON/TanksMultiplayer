@@ -1,8 +1,8 @@
 #ifndef BULLET_HPP
 #define BULLET_HPP
 
-#include "IMovable.hpp"
-#include "IDrawable.hpp"
+#include "sys/IMovable.hpp"
+#include "sys/IDrawable.hpp"
 
 class Renderer;
 

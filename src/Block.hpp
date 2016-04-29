@@ -1,8 +1,8 @@
 #ifndef BLOCK_HPP
 #define BLOCK_HPP
 
-#include "IDrawable.hpp"
-#include "IPositional.hpp"
+#include "sys/IDrawable.hpp"
+#include "sys/IPositional.hpp"
 
 class Polygon;
 
