@@ -4,6 +4,7 @@
 #include <thread>
 #include "Renderer.hpp"
 #include "sys/Time.hpp"
+#include "sys/Utils.hpp"
 #include "sys/Debug.hpp"
 #include "Tank.hpp"
 #include "NetworkManager.hpp"
@@ -30,7 +31,10 @@ void Core::start() {
         return;
         
     m_world = new World(new Map(100, 70));
-    m_world->addTank(new Tank(new Polygon({{-5, -5}, {5, -5}, {5, 5}, {-5, 5}}), 10, 5));
+    Tank* t = new Tank(new Polygon({{-10, -10}, {10, -10}, {10, 10}, {-10, 10}}), 10, 5);
+    t->setPos({40, 40});
+    m_world->addTank(t);
+    
     
     run();
 }
@@ -80,6 +84,8 @@ void Core::run() {
 		}
 
 		if (needUpdate) {
+            m_world->getTanks()[0]->setRotation(m_world->getTanks()[0]->getRotation() + updateTime);
+            
             if (m_renderer->isActive()) {
                 sf::Event event;
                 while (m_renderer->getWindow()->pollEvent(event)) {

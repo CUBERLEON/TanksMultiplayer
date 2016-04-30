@@ -2,11 +2,11 @@
 #define BLOCK_HPP
 
 #include "sys/IDrawable.hpp"
-#include "sys/IPositional.hpp"
+#include "sys/IPositionable.hpp"
 
 class Polygon;
 
-class Block : public IDrawable, public IPositional {
+class Block : public IDrawable, public IPositionable {
 public:
     enum TYPE {
         BRICK,

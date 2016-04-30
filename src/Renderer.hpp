@@ -20,7 +20,7 @@ public:
     void display();
     void draw(IDrawable* r);
     
-    void draw(Polygon* p, const std::pair<float, float>& pos, float rotation);
+    void draw(Polygon* p, const std::pair<float, float>& pos, float angle);
 protected:
 private:
     bool m_isActive;

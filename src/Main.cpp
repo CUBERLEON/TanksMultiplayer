@@ -43,7 +43,9 @@ void process_command(std::string text) {
             exit(0);
         } else if (command == "create") {
             Core* core = new Core();
-            core->getRenderer()->setWindow(new sf::RenderWindow(sf::VideoMode(800, 600), "Tanks - Host"));
+            sf::ContextSettings settings;
+            settings.antialiasingLevel = 8;
+            core->getRenderer()->setWindow(new sf::RenderWindow(sf::VideoMode(800, 600), "Tanks - Host", sf::Style::Default, settings));
             core->start();
         } else if (command == "connect") {
             Core* core = new Core();

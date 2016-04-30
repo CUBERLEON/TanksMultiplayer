@@ -31,6 +31,12 @@ float cross(const pair<T, U>& a, const pair<T, U>& b) {
     return a.first * b.second - a.second * b.first;
 }
 
+template <typename T, typename U>
+pair<T, U> rotate(const pair<T, U>& a, float angle) {
+    double c = cos(angle), s = sin(angle);
+    return { c * a.first + s * a.second, -s * a.first + c * a.second };
+}
+
 template <typename T>
 int sign(T a) {
     return (a > 0) - (a < 0);

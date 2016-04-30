@@ -1,9 +1,9 @@
 #ifndef I_MOVABLE_HPP
 #define I_MOVABLE_HPP
 
-#include "IPositional.hpp"
+#include "IPositionable.hpp"
 
-class IMovable : public IPositional {
+class IMovable : public IPositionable {
 public:
     const std::pair<float, float>& getSpeed() const { return m_speed; }
     float getSpeedX() const { return m_speed.first; }

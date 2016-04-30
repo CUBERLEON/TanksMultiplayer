@@ -1,9 +1,10 @@
-#ifndef I_POSITIONAL_HPP
-#define I_POSITIONAL_HPP
+#ifndef I_POSITIONABLE_HPP
+#define I_POSITIONABLE_HPP
 
 #include <utility>
+#include "Utils.hpp"
 
-class IPositional {
+class IPositionable {
 public:
     const std::pair<float, float>& getPos() const { return m_pos; }
     float getPosX() const { return m_pos.first; }
@@ -13,9 +14,11 @@ public:
     void setPosX(float posX) { m_pos.first = posX; }
     void setPosY(float posY) { m_pos.second = posY; }
     void setRotation(float angle) { m_rotation = angle; }
+    void rotate(float angle) { m_rotation += angle; }
+    void move(const std::pair<float, float>& d) { m_pos += d; }
 protected:
-    IPositional(const std::pair<float, float> pos, float angle) : m_pos(pos), m_rotation(angle) {}
-    ~IPositional() {}
+    IPositionable(const std::pair<float, float> pos, float angle) : m_pos(pos), m_rotation(angle) {}
+    ~IPositionable() {}
 private:
     std::pair<float, float> m_pos;
     float m_rotation;

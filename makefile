@@ -2,13 +2,13 @@ CC=g++
 CXX=g++
 CXXFLAGS=-std=c++11 -Wall -Wextra -Ilibs/include -DSFML_STATIC
 LDFLAGS=-static-libgcc -static-libstdc++
-LDLIBS=
+LDLIBS=-lsfml-graphics-s -lsfml-window-s -lsfml-system-s
 ifeq ($(OS),Windows_NT)
 	LDFLAGS+=-Llibs/lib/windows
-	LDLIBS+=-lsfml-graphics-s -lsfml-window-s -lsfml-system-s -lfreetype -ljpeg -lwinmm -lgdi32 -lopengl32
+	LDLIBS+=-lfreetype -ljpeg -lwinmm -lgdi32 -lopengl32
 else
-	LDFLAGS+=
-	LDLIBS+=-lsfml-graphics -lsfml-window -lsfml-system
+	LDFLAGS+=-Llibs/lib/linux
+	LDLIBS+=-ljpeg -lX11 -lpthread -lxcb -lxcb-randr -lxcb-image -lGL -lX11-xcb -ludev
 endif
 
 vpath %.o obj

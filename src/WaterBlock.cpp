@@ -12,5 +12,5 @@ WaterBlock::~WaterBlock() {
 }
 
 void WaterBlock::draw(Renderer* renderer) {
-    
+    renderer->draw(getShape(), getPos(), getRotation());
 }

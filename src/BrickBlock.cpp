@@ -8,5 +8,5 @@ BrickBlock::BrickBlock(Polygon* shape)
 }
 
 void BrickBlock::draw(Renderer* renderer) {
-    
+    renderer->draw(getShape(), getPos(), getRotation());
 }

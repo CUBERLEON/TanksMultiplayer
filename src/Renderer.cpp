@@ -2,7 +2,7 @@
 
 #include "sys/IDrawable.hpp"
 #include "sys/Polygon.hpp"
-#include "sys/Debug.hpp"
+#include "sys/Utils.hpp"
 
 Renderer::Renderer()
 : m_isActive(false), m_window(nullptr)
@@ -30,9 +30,22 @@ void Renderer::draw(IDrawable* r) {
         r->draw(this);
 }
 
-void Renderer::draw(Polygon* p, const std::pair<float, float>& pos, float rotation) {
-    sf::RectangleShape line(sf::Vector2f(150, 5));
-    line.rotate(45);
-    line.setFillColor(sf::Color(0, 0, 0));
-    m_window->draw(line);
+void Renderer::draw(Polygon* p, const std::pair<float, float>& pos, float angle) {
+    std::vector<sf::Vertex> vertices;
+    for (unsigned int i = 0; i <= p->getPoints().size(); ++i) {
+        std::pair<float, float> a1 = p->getPoints()[i % p->getPoints().size()];
+        a1 = rotate(a1, angle);
+        vertices.push_back(sf::Vertex(sf::Vector2f(a1.first + pos.first, a1.second + pos.second)));
+    }
+    m_window->draw(&vertices[0], vertices.size(), sf::LinesStrip);
+    
+    // sf::ConvexShape convex;
+    // convex.setPointCount(p->getPoints().size());
+    // for (unsigned int i = 0; i < p->getPoints().size(); ++i) {
+    //     std::pair<float, float> a1 = p->getPoints()[i];
+    //     convex.setPoint(i, sf::Vector2f(a1.first, a1.second));
+    // }
+    // convex.setRotation(180.*angle/M_PI);
+    // convex.setPosition({pos.first, pos.second});
+    // m_window->draw(convex);
 }
