@@ -3,12 +3,13 @@
 
 #include "sys/IMovable.hpp"
 #include "sys/IDrawable.hpp"
+#include "sys/ICollidable.hpp"
 
 class Renderer;
 
-class Bullet : public IMovable, public IDrawable {
+class Bullet : public IMovable, public IDrawable, public ICollidable {
 public:
-    Bullet(float penetration);
+    Bullet(float penetration, Polygon* shape);
     virtual ~Bullet(); 
     
     float getPenetration() const { return m_penetration; }

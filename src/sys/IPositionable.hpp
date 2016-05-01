@@ -19,9 +19,10 @@ public:
 protected:
     IPositionable(const std::pair<float, float> pos, float angle) : m_pos(pos), m_rotation(angle) {}
     ~IPositionable() {}
-private:
+    
     std::pair<float, float> m_pos;
     float m_rotation;
+private:
 };
 
 #endif

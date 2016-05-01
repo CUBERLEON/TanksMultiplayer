@@ -5,9 +5,10 @@
 
 class ICollidable {
 public:
-    
+    Polygon* getShape() const { return m_shape; }
+    void setShape(Polygon* shape) { m_shape = shape; }
 protected:
-    ICollidable() {}
+    ICollidable(Polygon* shape) : m_shape(shape) {}
     ~ICollidable() { delete m_shape; }
     
     Polygon* m_shape;

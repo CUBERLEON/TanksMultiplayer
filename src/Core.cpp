@@ -31,10 +31,12 @@ void Core::start() {
         return;
         
     m_world = new World(new Map(100, 70));
-    Tank* t = new Tank(new Polygon({{-10, -10}, {10, -10}, {10, 10}, {-10, 10}}), 10, 5);
+    Tank* t = new Tank(10, 5, new Polygon({{-10, -10}, {10, -10}, {10, 10}, {-10, 10}}));
     t->setPos({40, 40});
     m_world->addTank(t);
     
+	if (m_renderer->isActive())
+		m_renderer->getWindow()->requestFocus();
     
     run();
 }
@@ -78,13 +80,13 @@ void Core::run() {
 		}
 
 		if (fpsTime >= fpsRefreshTime) {
-			Debug::info("%.1f fps", frames / fpsTime);
+			// Debug::info("%.1f fps", frames / fpsTime);
 			fpsTime -= fpsRefreshTime;
 			frames = 0;
 		}
 
 		if (needUpdate) {
-            m_world->getTanks()[0]->setRotation(m_world->getTanks()[0]->getRotation() + updateTime);
+            m_world->getTanks()[0]->rotate(updateTime);
             
             if (m_renderer->isActive()) {
                 sf::Event event;
@@ -104,7 +106,7 @@ void Core::run() {
 			frames++;
 		}
 		else {
-			std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		}
         
 		prevTime = curTime;

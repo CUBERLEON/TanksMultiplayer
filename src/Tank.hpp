@@ -3,17 +3,16 @@
 
 #include "sys/IMovable.hpp"
 #include "sys/IDrawable.hpp"
+#include "sys/ICollidable.hpp"
 
 class Renderer;
 class Polygon;
 
-class Tank : public IMovable, public IDrawable {
+class Tank : public IMovable, public IDrawable, public ICollidable {
 public:
-    Tank(Polygon* shape, float enginePower, float maxSpeed);
+    Tank(float enginePower, float maxSpeed, Polygon* shape);
     virtual ~Tank();
     
-    Polygon* getShape() const { return m_shape; }
-    void setShape(Polygon* shape) { m_shape = shape; }
     float getEnginePower() const { return m_enginePower; }
     float getMaxSpeed() const { return m_maxSpeed; }
     int getLevel() const { return m_level; }
@@ -21,8 +20,6 @@ public:
     void draw(Renderer* renderer);
 protected:
 private:
-    Polygon* m_shape;
-
     float m_enginePower;
     float m_maxSpeed;
     

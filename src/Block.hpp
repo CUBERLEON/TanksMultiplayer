@@ -3,10 +3,11 @@
 
 #include "sys/IDrawable.hpp"
 #include "sys/IPositionable.hpp"
+#include "sys/ICollidable.hpp"
 
 class Polygon;
 
-class Block : public IDrawable, public IPositionable {
+class Block : public IDrawable, public IPositionable, public ICollidable {
 public:
     enum TYPE {
         BRICK,
@@ -16,17 +17,13 @@ public:
     
     virtual ~Block();
         
-    Polygon* getShape() const { return m_shape; }
-    void setShape(Polygon* shape) { m_shape = shape; }
     bool isBulletProof() const { return m_isBulletProof; }
     bool isPassable() const { return m_isPassable; }
     
     virtual int getType() const = 0;
 protected:
-    Block(Polygon* shape, bool isBulletProof, bool isPassable);
+    Block(bool isBulletProof, bool isPassable, Polygon* shape);
 private:
-    Polygon* m_shape;
-    
     bool m_isBulletProof;
     bool m_isPassable;
 };

@@ -8,11 +8,13 @@ namespace Debug {
 	template<typename... Args>
 	static void info(std::string fmt, Args... args) {
 		std::fprintf(stdout, (fmt + "\n").c_str(), args...);
+		fflush(stdout);
 	}
 
 	template<typename... Args>
 	static void warning(std::string fmt, Args... args) {
 		std::fprintf(stdout, ("Warning: " + fmt + "\n").c_str(), args...);
+		fflush(stdout);
 	}
 
 	template<typename... Args>

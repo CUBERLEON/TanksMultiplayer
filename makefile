@@ -17,20 +17,31 @@ vpath %.cpp src
 src_sys=Utils.cpp Time.cpp Polygon.cpp
 src_main=Main.cpp Map.cpp Tank.cpp Block.cpp BrickBlock.cpp WaterBlock.cpp Core.cpp World.cpp Renderer.cpp Bullet.cpp
 
-obj_sys=$(addprefix obj/sys/,$(src_sys:.cpp=.o))
-obj_main=$(addprefix obj/,$(src_main:.cpp=.o))
+src_sys:=$(addprefix src/sys/, $(src_sys))
+src_main:=$(addprefix src/, $(src_main))
+obj_sys:=$(subst src,obj,$(src_sys:.cpp=.o))
+obj_main:=$(subst src,obj,$(src_main:.cpp=.o))
 
 all: game
 
-game: $(obj_main) $(obj_sys)
+game: $(obj_main) $(obj_sys) #depend
 	$(CC) $(LDFLAGS) $(obj_main) $(obj_sys) $(LDLIBS) -o tanks_multiplayer
+
+#include depend1
 
 obj/%.o: src/%.cpp
 	@mkdir -p obj/sys
 	@mkdir -p obj
 	$(CXX) -c $(CXXFLAGS) $^ -o $@
 
+depend: depend1
+
+depend1: $(src_sys) $(src_main)
+	@rm -f depend1
+	$(CC) $(CXXFLAGS) -MM $^ > depend1
+
 clean:
 	@$(RM) -r obj
+	@$(RM) -f depend1
 	@$(RM) tanks_multiplayer
 
