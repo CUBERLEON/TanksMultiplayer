@@ -1,6 +1,7 @@
 #ifndef TANK_HPP
 #define TANK_HPP
 
+#include <string>
 #include "sys/IMovable.hpp"
 #include "sys/IDrawable.hpp"
 #include "sys/ICollidable.hpp"

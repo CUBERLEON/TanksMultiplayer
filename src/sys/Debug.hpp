@@ -20,11 +20,13 @@ namespace Debug {
 	template<typename... Args>
 	static void error(std::string fmt, Args... args) {
 		fprintf(stderr, ("Error: " + fmt + "\n").c_str(), args...);
+		fflush(stderr);
 	}
 
 	template<typename... Args>
 	static void fatalError(std::string fmt, Args... args) {
 		fprintf(stderr, ("Fatal Error: " + fmt + "\n").c_str(), args...);
+		fflush(stderr);
 		exit(EXIT_FAILURE);
 	}
 };

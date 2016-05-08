@@ -3,7 +3,7 @@
 #include "Renderer.hpp"
 
 WaterBlock::WaterBlock(Polygon* shape)
-: Block(shape, false, false)
+: Block(false, false, shape)
 {
 }
 
@@ -12,5 +12,5 @@ WaterBlock::~WaterBlock() {
 }
 
 void WaterBlock::draw(Renderer* renderer) {
-    renderer->draw(getShape(), getPos(), getRotation());
+    renderer->draw(getShape(), getPos(), getRot());
 }

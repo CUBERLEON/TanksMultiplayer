@@ -16,12 +16,15 @@ public:
     
     float getWidth() const { return m_width; }
     float getHeight() const { return m_height; }
+    const std::vector<Block*>& getBlocks() const { return m_blocks; }
+    const std::vector< std::pair<float, float> >& getSpawns() const { return m_spawns; }
+    
     void addBlock(Block* block) { m_blocks.push_back(block); }
     void setBlocks(const std::vector<Block*>& blocks) { m_blocks = blocks; }
-    const std::vector<Block*>& getBlocks() const { return m_blocks; }
+    void addSpawn(const std::pair<float, float>& spawn) { m_spawns.push_back(spawn); }
+    void setSpawns(const std::vector< std::pair<float, float> >& spawns) { m_spawns = spawns; }
     
     void clear();
-    void loadFromFile(const std::string& fileName);
     
     void draw(Renderer* renderer);
 protected:
@@ -30,6 +33,9 @@ private:
     float m_height;
     
     std::vector<Block*> m_blocks;
+    std::vector< std::pair<float, float> > m_spawns;
+    
+    void loadFromFile(const std::string& filePath);
 };
 
 #endif

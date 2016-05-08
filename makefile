@@ -15,7 +15,8 @@ vpath %.o obj
 vpath %.cpp src
 
 src_sys=Utils.cpp Time.cpp Polygon.cpp
-src_main=Main.cpp Map.cpp Tank.cpp Block.cpp BrickBlock.cpp WaterBlock.cpp Core.cpp World.cpp Renderer.cpp Bullet.cpp
+src_main=Main.cpp Map.cpp Tank.cpp Block.cpp Core.cpp World.cpp Renderer.cpp SFMLRenderer.cpp Bullet.cpp
+# src_main+=BrickBlock.cpp WaterBlock.cpp
 
 src_sys:=$(addprefix src/sys/, $(src_sys))
 src_main:=$(addprefix src/, $(src_main))

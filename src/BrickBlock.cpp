@@ -3,10 +3,10 @@
 #include "Renderer.hpp"
 
 BrickBlock::BrickBlock(Polygon* shape)
-: Block(shape, true, false)
+: Block(true, false, shape)
 {
 }
 
 void BrickBlock::draw(Renderer* renderer) {
-    renderer->draw(getShape(), getPos(), getRotation());
+    renderer->draw(getShape(), getPos(), getRot());
 }

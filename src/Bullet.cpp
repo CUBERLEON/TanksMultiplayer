@@ -11,5 +11,5 @@ Bullet::~Bullet() {
 }
 
 void Bullet::draw(Renderer* renderer) {
-    renderer->draw(m_shape, m_pos, m_rotation);
+    renderer->draw(m_shape, *this);
 }

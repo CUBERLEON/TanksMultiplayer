@@ -4,6 +4,7 @@
 #include "Tank.hpp"
 #include "Bullet.hpp"
 #include "Renderer.hpp"
+#include "sys/Debug.hpp"
 
 World::World(Map* map)
 : m_map(map), m_updateTime(1.), m_curTime(0.)

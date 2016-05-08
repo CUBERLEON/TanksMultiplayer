@@ -6,23 +6,26 @@
 #include "sys/ICollidable.hpp"
 
 class Polygon;
+class Renderer;
 
 class Block : public IDrawable, public IPositionable, public ICollidable {
 public:
-    enum TYPE {
-        BRICK,
-        WATER,
-        TYPES_CNT
-    };
+    // enum TYPE {
+    //     BRICK,
+    //     WATER,
+    //     TYPES_CNT
+    // };
     
+    Block(bool isBulletProof, bool isPassable, Polygon* shape);
     virtual ~Block();
         
     bool isBulletProof() const { return m_isBulletProof; }
     bool isPassable() const { return m_isPassable; }
     
-    virtual int getType() const = 0;
+    virtual void draw(Renderer* renderer) override;
+    
+    // virtual int getType() const = 0;
 protected:
-    Block(bool isBulletProof, bool isPassable, Polygon* shape);
 private:
     bool m_isBulletProof;
     bool m_isPassable;

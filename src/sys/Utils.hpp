@@ -4,12 +4,14 @@
 #include <utility>
 #include <string>
 #include <cmath>
+#include <algorithm>
 
 #define sqr(a) (a)*(a)
 
 using std::pair;
 
 const float EPS = 1e-3;
+const float PI = acos(-1.);
 
 template <typename T, typename U> pair<T, U> operator+ (const pair<T, U>& l, const pair<T, U>& r) { return{ l.first + r.first, l.second + r.second }; }
 template <typename T, typename U> pair<T, U> operator+= (pair<T, U>& l, const pair<T, U>& r) { l.first += r.first; l.second += r.second; return l; }
@@ -35,6 +37,15 @@ template <typename T, typename U>
 pair<T, U> rotate(const pair<T, U>& a, float angle) {
     double c = cos(angle), s = sin(angle);
     return { c * a.first + s * a.second, -s * a.first + c * a.second };
+}
+
+template <typename T, typename U>
+pair<T, U> scale(const pair<T, U>& a, const pair<T, U>& b) {
+    return {a.first * b.first, a.second * b.second};
+}
+template <typename T, typename U>
+pair<T, U> scale(const pair<T, U>& a, float scale) {
+    return { scale * a.first, scale * a.second };
 }
 
 template <typename T>
