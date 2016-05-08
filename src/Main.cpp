@@ -5,7 +5,8 @@
 #include <vector>
 #include <cstdio>
 #include <sstream>
-#include "Core.hpp"
+#include "ServerCore.hpp"
+#include "ClientCore.hpp"
 #include "Renderer.hpp"
 #include "sys/Debug.hpp"
 
@@ -42,15 +43,17 @@ void process_command(std::string text) {
         if (command == "exit") {
             exit(0);
         } else if (command == "create") {
-            Core* core = new Core();
+            Core* core = new ServerCore();
             core->getRenderer()->setSettings(2);
-            core->getRenderer()->createWindow(800, 600, "Tanks - Host");
+            core->getRenderer()->createWindow(900, 600, "Tanks - Host");
             core->start();
+            delete core;
         } else if (command == "connect") {
-            Core* core = new Core();
+            Core* core = new ClientCore();
             core->getRenderer()->setSettings(2);
-            core->getRenderer()->createWindow(800, 600, "Tanks - Client");
+            core->getRenderer()->createWindow(900, 600, "Tanks - Client");
             core->start();
+            delete core;
         } else if (command == "help") {
             std::cout << "Help is currently not available!" << std::endl;
         } else {

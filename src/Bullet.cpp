@@ -6,10 +6,9 @@ Bullet::Bullet(float penetration, Polygon* shape)
 : IMovable({0, 0}, {0, 0}, 0), ICollidable(shape), m_penetration(penetration)
 {}
 
-Bullet::~Bullet() {
-    
-}
+Bullet::~Bullet()
+{}
 
 void Bullet::draw(Renderer* renderer) {
-    renderer->draw(m_shape, *this);
+    renderer->draw(*m_shape, *this);
 }

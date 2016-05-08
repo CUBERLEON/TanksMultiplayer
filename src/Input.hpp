@@ -3,31 +3,31 @@
 
 class Input {
 public:
-    static enum Keyboard {
+    enum Keyboard {
         A = 0,
         W,
         S,
         D,
-        Escape,
-        KEYS_CNT
+        KEYBOARD_CNT
     };
-    static enum Mouse {
+    enum Mouse {
         Left = 0,
         Right,
-        KEYS_CNT
+        MOUSE_CNT
     };
     
-    Input();
-    ~Input();
-
-    void update();
+    virtual ~Input();
     
     int getKeyboardKeyState(unsigned int key) const { return m_keyboard[key]; }
     int getMouseKeyState(unsigned int key) const { return m_mouse[key]; }
 protected:
-private:
+    Input();
+
     int* m_keyboard;
     int* m_mouse;
+    
+    virtual void update() = 0;
+private:
 };
 
 #endif

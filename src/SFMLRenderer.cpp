@@ -1,20 +1,23 @@
-#include "SFMLRenderer.hpp"
+#include "SFMLrenderer.hpp"
 
 #include "sys/IDrawable.hpp"
 #include "sys/IPositionable.hpp"
 #include "sys/Polygon.hpp"
 #include "sys/Utils.hpp"
 #include "sys/Debug.hpp"
+#include "SFMLinput.hpp"
 
-SFMLRenderer::SFMLRenderer()
+SFMLrenderer::SFMLrenderer()
 : m_window(nullptr)
-{}
+{
+    m_input = new SFMLinput();
+}
 
-SFMLRenderer::~SFMLRenderer() {
+SFMLrenderer::~SFMLrenderer() {
     delete m_window;
 }
 
-void SFMLRenderer::createWindow(int width, int height, std::string title) {
+void SFMLrenderer::createWindow(int width, int height, std::string title) {
     m_width = width;
     m_height = height;
     m_title = title;
@@ -29,11 +32,17 @@ void SFMLRenderer::createWindow(int width, int height, std::string title) {
     m_active = true;
 }
 
-void SFMLRenderer::recreateWindow() {
+void SFMLrenderer::recreateWindow() {
     createWindow(m_width, m_height, m_title);
 }
 
-void SFMLRenderer::update() {
+void SFMLrenderer::update() {
+    
+}
+
+void SFMLrenderer::input() {
+    ((SFMLinput*)m_input)->update();
+    
     sf::Event event;
     while (m_active && m_window->pollEvent(event)) {
         if (event.type == sf::Event::Closed)
@@ -41,19 +50,11 @@ void SFMLRenderer::update() {
     	if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Escape)
                 destroyWindow();
-    		// if (event.key.code == sf::Keyboard::A)
-    		// 	m_world->getTanks()[0]->rotate(5*updateTime);
-    		// if (event.key.code == sf::Keyboard::D)
-    		// 	m_world->getTanks()[0]->rotate(-5*updateTime);
     	}
     }
-    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-    // 	m_world->getTanks()[0]->rotate(5*updateTime);
-    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-    // 	m_world->getTanks()[0]->rotate(-5*updateTime);
 }
 
-void SFMLRenderer::destroyWindow() {
+void SFMLrenderer::destroyWindow() {
     if (!m_active)
         return;
         
@@ -64,34 +65,35 @@ void SFMLRenderer::destroyWindow() {
     }
 }
 
-void SFMLRenderer::setSettings(short antialiasing) {
+void SFMLrenderer::setSettings(short antialiasing, bool apply) {
     m_active = false;
     m_antialiasing = antialiasing;
 
-    recreateWindow();
+    if (apply)
+        recreateWindow();
 }
 
-void SFMLRenderer::requestFocus() {
+void SFMLrenderer::requestFocus() {
     m_window->requestFocus();
 }
 
-void SFMLRenderer::clear() {
+void SFMLrenderer::clear() {
     m_window->clear(sf::Color::Black);
 }
 
-void SFMLRenderer::display() {
+void SFMLrenderer::display() {
     m_window->display();
 }
 
-void SFMLRenderer::draw(IDrawable* r) {
+void SFMLrenderer::draw(IDrawable* r) {
     if (r != nullptr)
         r->draw(this);
 }
 
-void SFMLRenderer::draw(Polygon* p, const IPositionable& t) {
+void SFMLrenderer::draw(const Polygon& p, const IPositionable& t) {
     std::vector<sf::Vertex> vertices;
-    for (unsigned int i = 0; i <= p->getPoints().size(); ++i) {
-        std::pair<float, float> a1 = p->getPoints()[i % p->getPoints().size()];
+    for (unsigned int i = 0; i <= p.getPoints().size(); ++i) {
+        std::pair<float, float> a1 = p.getPoints()[i % p.getPoints().size()];
 
         a1 = scale(a1, t.getScale());
         float k = 1.;
@@ -106,9 +108,9 @@ void SFMLRenderer::draw(Polygon* p, const IPositionable& t) {
     m_window->draw(&vertices[0], vertices.size(), sf::LinesStrip);
 
     // sf::ConvexShape convex;
-    // convex.setPointCount(p->getPoints().size());
-    // for (unsigned int i = 0; i < p->getPoints().size(); ++i) {
-    //     std::pair<float, float> a1 = p->getPoints()[i];
+    // convex.setPointCount(p.getPoints().size());
+    // for (unsigned int i = 0; i < p.getPoints().size(); ++i) {
+    //     std::pair<float, float> a1 = p.getPoints()[i];
     //     convex.setPoint(i, sf::Vector2f(a1.first, a1.second));
     // }
     // convex.setRotation(getRotDeg());

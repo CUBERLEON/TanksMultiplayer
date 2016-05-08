@@ -11,5 +11,5 @@ Block::~Block() {
 }
 
 void Block::draw(Renderer* renderer) {
-    renderer->draw(m_shape, *this);
+    renderer->draw(*m_shape, *this);
 }

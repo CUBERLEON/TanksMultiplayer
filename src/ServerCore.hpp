@@ -5,6 +5,10 @@
 
 class ServerCore: public Core {
 public:
+    ServerCore();
+    ~ServerCore();
+    
+    void sync() override;
 protected:
 private:
 };

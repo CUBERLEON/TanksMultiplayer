@@ -2,34 +2,33 @@
 #define CORE_HPP
 
 class Renderer;
-class NetworkManager;
+// class NetworkManager;
 class World;
 
 class Core {
 public:
-    Core();
-    ~Core();
+    virtual ~Core();
     
-    Renderer* getRenderer() const;
     bool isRunning() const { return m_isRunning; }
+    Renderer* getRenderer() const;
     
     void start();
     void stop();
     
-    void sync();
+    virtual void sync() = 0;
 protected:
-private:
+    Core();
+    
     bool m_isRunning;
-    bool m_isHost;
 
     Renderer* m_renderer;
     int m_fpsLimit;
     
-    NetworkManager* m_nManager;
+    // NetworkManager* m_nManager;
     
     World* m_world;
     // Interface* m_interface;
-    
+private:
     void run();
 };
 

@@ -5,6 +5,7 @@
 #include "sys/System.hpp"
 #include "Block.hpp"
 #include "Renderer.hpp"
+#include "sys/IPositionable.hpp"
 
 Map::Map(float width, float height)
 : m_width(width), m_height(height)
@@ -22,11 +23,14 @@ Map::~Map() {
 
 void Map::clear() {
     m_blocks.clear();
+    m_spawns.clear();
 }
 
 void Map::draw(Renderer* renderer) {
     for (unsigned int i = 0; i < m_blocks.size(); ++i)
         renderer->draw(m_blocks[i]);
+    
+    renderer->draw(Polygon({{0, 0}, {m_width, 0}, {m_width, m_height}, {0, m_height}}), IPositionable());
 }
 
 void Map::loadFromFile(const std::string& filePath) {

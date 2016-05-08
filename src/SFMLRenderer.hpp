@@ -4,24 +4,25 @@
 #include "Renderer.hpp"
 #include <SFML/Graphics.hpp>
 
-class SFMLRenderer : public Renderer {
+class SFMLrenderer : public Renderer {
 public:
-    SFMLRenderer();
-    ~SFMLRenderer();
+    SFMLrenderer();
+    virtual ~SFMLrenderer();
 
-    void createWindow(int width, int height, std::string title);
-    void recreateWindow();
-    void destroyWindow();
-    void setSettings(short antialiasing);
+    void createWindow(int width, int height, std::string title) override;
+    void recreateWindow() override;
+    void destroyWindow() override;
+    void setSettings(short antialiasing, bool apply = false) override;
     
-    void requestFocus();
-    void update();
+    void requestFocus() override;
+    void update() override;
+    void input() override;
     
-    void clear();
-    void display();
-    void draw(IDrawable* r);
+    void clear() override;
+    void display() override;
+    void draw(IDrawable* r) override;
     
-    void draw(Polygon* p, const IPositionable& t);
+    void draw(const Polygon& p, const IPositionable& t) override;
 protected:
 private:
     sf::RenderWindow* m_window;

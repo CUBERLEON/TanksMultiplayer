@@ -20,8 +20,8 @@ public:
     const std::vector< std::pair<float, float> >& getSpawns() const { return m_spawns; }
     
     void addBlock(Block* block) { m_blocks.push_back(block); }
-    void setBlocks(const std::vector<Block*>& blocks) { m_blocks = blocks; }
     void addSpawn(const std::pair<float, float>& spawn) { m_spawns.push_back(spawn); }
+    void setBlocks(const std::vector<Block*>& blocks) { m_blocks = blocks; }
     void setSpawns(const std::vector< std::pair<float, float> >& spawns) { m_spawns = spawns; }
     
     void clear();

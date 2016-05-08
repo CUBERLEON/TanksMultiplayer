@@ -11,14 +11,14 @@
 #include "Map.hpp"
 #include "sys/Polygon.hpp"
 #if defined(_WIN32) || defined(__linux__) 
-	#include "SFMLRenderer.hpp"
+	#include "SFMLrenderer.hpp"
 #endif
 
 Core::Core()
 : m_isRunning(false), m_renderer(nullptr), m_fpsLimit(60)
 {
 	#if defined(_WIN32) || defined(__linux__)
-    	m_renderer = new SFMLRenderer();
+    	m_renderer = new SFMLrenderer();
 	#endif
 }
 
@@ -96,10 +96,12 @@ void Core::run() {
 		}
 
 		if (needUpdate) {
-            // m_world->getTanks()[0]->rotate(updateTime);
+            m_world->getTanks()[0]->rotate(updateTime);
             
-			if (m_renderer->isActive())
-				m_renderer->update();			
+			if (m_renderer->isActive()) {
+				m_renderer->input();
+				m_renderer->update();
+			}		
 			
             if (m_renderer->isActive()) {
                 m_renderer->clear();   
@@ -118,8 +120,4 @@ void Core::run() {
 	}
 	
 	m_isRunning = false;
-}
-
-void Core::sync() {
-    
 }

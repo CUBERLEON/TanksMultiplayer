@@ -7,6 +7,7 @@
 class IDrawable;
 class Polygon;
 class IPositionable;
+class Input;
 
 class Renderer {
 public:
@@ -17,20 +18,22 @@ public:
     int getWidth() const { return m_width; }
     int getHeight() const { return m_height; }
     std::string getTitle() const { return m_title; }
+    Input* getInput() const;
     
     virtual void createWindow(int width, int height, std::string title) = 0;
     virtual void recreateWindow() = 0;
     virtual void destroyWindow() = 0;
-    virtual void setSettings(short antialiasing) = 0;
+    virtual void setSettings(short antialiasing, bool apply = false) = 0;
     
     virtual void requestFocus() = 0;
     virtual void update() = 0;
+    virtual void input() = 0;
     
     virtual void clear() = 0;
     virtual void display() = 0;
     virtual void draw(IDrawable* r) = 0;
     
-    virtual void draw(Polygon* p, const IPositionable& t) = 0;
+    virtual void draw(const Polygon& p, const IPositionable& t) = 0;
     
     void setDrawTransform(bool enabled) { m_activeDT = enabled; }
     bool isActiveDrawTransform() const { return m_activeDT; }
@@ -49,6 +52,8 @@ protected:
     bool m_activeDT;
     int m_widthDT;
     int m_heightDT;
+    
+    Input* m_input;
 private:
 };
 

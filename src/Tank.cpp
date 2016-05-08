@@ -13,5 +13,5 @@ Tank::~Tank() {
 }
 
 void Tank::draw(Renderer* renderer) {
-    renderer->draw(m_shape, *this);
+    renderer->draw(*m_shape, *this);
 }

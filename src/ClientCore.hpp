@@ -5,6 +5,10 @@
 
 class ClientCore: public Core {
 public:
+    ClientCore();
+    ~ClientCore();
+    
+    void sync() override;
 protected:
 private:
 };
