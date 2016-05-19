@@ -8,7 +8,7 @@ public:
     ServerCore();
     ~ServerCore();
     
-    void sync() override;
+    virtual void sync() override;
 protected:
 private:
 };

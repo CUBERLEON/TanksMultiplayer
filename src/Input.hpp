@@ -25,8 +25,6 @@ protected:
 
     int* m_keyboard;
     int* m_mouse;
-    
-    virtual void update() = 0;
 private:
 };
 

@@ -1,10 +1,10 @@
 #include "SFMLrenderer.hpp"
 
-#include "sys/IDrawable.hpp"
-#include "sys/IPositionable.hpp"
-#include "sys/Polygon.hpp"
-#include "sys/Utils.hpp"
-#include "sys/Debug.hpp"
+#include "../sys/IDrawable.hpp"
+#include "../sys/IPositionable.hpp"
+#include "../sys/Polygon.hpp"
+#include "../sys/Utils.hpp"
+#include "../sys/Debug.hpp"
 #include "SFMLinput.hpp"
 
 SFMLrenderer::SFMLrenderer()

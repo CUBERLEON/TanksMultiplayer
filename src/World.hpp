@@ -12,7 +12,7 @@ class Renderer;
 class World : public IDrawable {
 public:
     World(Map* map);
-    ~World();
+    virtual ~World();
     
     const std::vector<Tank*>& getTanks() const;
     const std::vector<Bullet*>& getBullets() const;
@@ -20,11 +20,11 @@ public:
     void addTank(Tank* tank);
     void addBullet(Bullet* bullet);
     
-    void setUpdateTime(float time) { m_updateTime = time; }
-    float getCurTime() const { return m_curTime; }
+    // void setUpdateTime(float time) { m_updateTime = time; }
+    // float getCurTime() const { return m_curTime; }
     
     void update(float time);
-    void draw(Renderer* renderer);
+    virtual void draw(Renderer* renderer) override;
 protected:
 private:
     Map* m_map;
@@ -32,8 +32,8 @@ private:
     std::vector<Bullet*> m_bullets;
     // std::vector<Bonus*> m_bonuses;
     
-    float m_updateTime;
-    float m_curTime;
+    // float m_updateTime;
+    // float m_curTime;
 };
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef SFML_INPUT_HPP
 #define SFML_INPUT_HPP
 
-#include "Input.hpp"
+#include "../Input.hpp"
 
 class SFMLrenderer;
 
@@ -11,8 +11,9 @@ public:
     SFMLinput();
     virtual ~SFMLinput();
 protected:
-    void update() override;
 private:
+    void update();
+    
     int toSFMLKeyboardKey(int key);
     int toSFMLMouseButton(int key);
 };

@@ -14,10 +14,10 @@ public:
     
     float getPenetration() const { return m_penetration; }
     
-    void draw(Renderer* renderer);
+    virtual void draw(Renderer* renderer) override;
 protected:
-private:
     float m_penetration;
+private:
 };
 
 #endif

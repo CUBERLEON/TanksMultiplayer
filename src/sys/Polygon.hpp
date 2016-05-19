@@ -22,11 +22,11 @@ public:
 protected:
     std::vector< std::pair<float, float> > m_points;
 private:
+    static std::map<std::string, Polygon*> m_loaded;
+    std::string m_fileName;
+    
     void loadFromFile(std::string fileName);
     void copy(const Polygon& r);
-    
-    std::string m_fileName;
-    static std::map<std::string, Polygon*> m_loaded;
 };
 
 #endif

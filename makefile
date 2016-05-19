@@ -14,24 +14,27 @@ endif
 vpath %.o obj
 vpath %.cpp src
 
+src_sfml=SFMLrenderer.cpp SFMLinput.cpp
 src_sys=Utils.cpp Time.cpp Polygon.cpp
 src_main=Main.cpp Map.cpp Tank.cpp Block.cpp World.cpp Bullet.cpp Renderer.cpp Input.cpp Core.cpp ServerCore.cpp ClientCore.cpp
-src_main+=SFMLrenderer.cpp SFMLinput.cpp
 # src_main+=BrickBlock.cpp WaterBlock.cpp
 
+src_sfml:=$(addprefix src/sfml/, $(src_sfml))
 src_sys:=$(addprefix src/sys/, $(src_sys))
 src_main:=$(addprefix src/, $(src_main))
+obj_sfml:=$(subst src,obj,$(src_sfml:.cpp=.o))
 obj_sys:=$(subst src,obj,$(src_sys:.cpp=.o))
 obj_main:=$(subst src,obj,$(src_main:.cpp=.o))
 
 all: game
 
-game: $(obj_main) $(obj_sys) #depend
-	$(CC) $(LDFLAGS) $(obj_main) $(obj_sys) $(LDLIBS) -o tanks_multiplayer
+game: $(obj_main) $(obj_sys) $(obj_sfml) #depend
+	$(CC) $(LDFLAGS) $(obj_main) $(obj_sys) $(obj_sfml) $(LDLIBS) -o tanks_multiplayer
 
 #include depend1
 
 obj/%.o: src/%.cpp
+	@mkdir -p obj/sfml
 	@mkdir -p obj/sys
 	@mkdir -p obj
 	$(CXX) -c $(CXXFLAGS) $^ -o $@

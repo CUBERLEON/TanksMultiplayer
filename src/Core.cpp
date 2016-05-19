@@ -9,9 +9,10 @@
 #include "NetworkManager.hpp"
 #include "World.hpp"
 #include "Map.hpp"
+#include "Input.hpp"
 #include "sys/Polygon.hpp"
 #if defined(_WIN32) || defined(__linux__) 
-	#include "SFMLrenderer.hpp"
+	#include "sfml/SFMLrenderer.hpp"
 #endif
 
 Core::Core()
@@ -96,7 +97,8 @@ void Core::run() {
 		}
 
 		if (needUpdate) {
-            m_world->getTanks()[0]->rotate(updateTime);
+			if (m_renderer->getInput()->getKeyboardKeyState(Input::Keyboard::A))
+            	m_world->getTanks()[0]->rotate(updateTime);
             
 			if (m_renderer->isActive()) {
 				m_renderer->input();

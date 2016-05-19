@@ -7,13 +7,26 @@
 #include "Renderer.hpp"
 #include "sys/IPositionable.hpp"
 
+std::map< std::string, Map* > Map::m_loaded;
+
+Map::Map(const Map& r)
+{
+    copy(r);
+}
+
 Map::Map(float width, float height)
-: m_width(width), m_height(height)
+: m_width(width), m_height(height), m_fileName("")
 {}
 
 Map::Map(const std::string& fileName)
 {
-    loadFromFile(MAPS_PATH + fileName + ".mp");
+    m_fileName = fileName;
+    if (m_loaded.count(fileName)) {
+        copy(*m_loaded.at(fileName));
+    } else {
+        loadFromFile(MAPS_PATH + fileName + ".mp");
+        m_loaded[fileName] = new Map(*this);
+    }
 }
 
 Map::~Map() {
@@ -31,6 +44,15 @@ void Map::draw(Renderer* renderer) {
         renderer->draw(m_blocks[i]);
     
     renderer->draw(Polygon({{0, 0}, {m_width, 0}, {m_width, m_height}, {0, m_height}}), IPositionable());
+}
+
+void Map::freeLoaded() {
+    Map* tmp;
+    for (auto i = m_loaded.begin(); i != m_loaded.end(); ++i) {
+        tmp = i->second;
+        m_loaded.erase(i->first);
+        delete tmp;
+    }
 }
 
 void Map::loadFromFile(const std::string& filePath) {
@@ -64,7 +86,15 @@ void Map::loadFromFile(const std::string& filePath) {
         } else if (type == "s") {
             float x, y;
             buf >> x >> y;
-            m_spawns.push_back({x, y});
+            m_spawns.push_back({x, y}); //!!!!!
         }
     }
+}
+
+void Map::copy(const Map& r) {
+    m_width = r.getWidth();
+    m_height = r.getHeight();
+    m_blocks = r.getBlocks();
+    m_spawns = r.getSpawns();
+    m_fileName = r.getFileName();
 }

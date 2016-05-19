@@ -7,7 +7,7 @@
 #include "sys/Debug.hpp"
 
 World::World(Map* map)
-: m_map(map), m_updateTime(1.), m_curTime(0.)
+: m_map(map)//, m_updateTime(1.), m_curTime(0.)
 {}
 
 World::~World() {

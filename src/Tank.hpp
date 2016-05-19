@@ -18,7 +18,7 @@ public:
     float getMaxSpeed() const { return m_maxSpeed; }
     int getLevel() const { return m_level; }
     
-    void draw(Renderer* renderer);
+    virtual void draw(Renderer* renderer) override;
 protected:
 private:
     float m_enginePower;

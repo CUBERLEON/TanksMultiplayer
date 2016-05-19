@@ -1,6 +1,6 @@
 #include "SFMLinput.hpp"
 
-#include "sys/Debug.hpp"
+#include "../sys/Debug.hpp"
 #include <SFML/Window.hpp>
 
 SFMLinput::SFMLinput()
