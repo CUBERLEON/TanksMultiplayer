@@ -6,21 +6,23 @@
 #include "sys/Utils.hpp"
 #include "sys/Debug.hpp"
 #include "Tank.hpp"
-#include "NetworkManager.hpp"
+// #include "NetworkManager.hpp"
 #include "World.hpp"
 #include "Map.hpp"
 #include "Input.hpp"
 #include "sys/Polygon.hpp"
-#if defined(_WIN32) || defined(__linux__) 
-	#include "sfml/SFMLrenderer.hpp"
+#ifdef SFML
+    #include "sfml/SFMLrenderer.hpp"
+    #include "sfml/SFMLnetworkMgr.hpp"
 #endif
 
 Core::Core()
-: m_isRunning(false), m_renderer(nullptr), m_fpsLimit(60)
+: m_isRunning(false), m_renderer(nullptr), m_fpsLimit(60), m_world(nullptr)
 {
-	#if defined(_WIN32) || defined(__linux__)
-    	m_renderer = new SFMLrenderer();
-	#endif
+#ifdef SFML
+    m_renderer = new SFMLrenderer();
+    m_network = new SFMLnetworkMgr();
+#endif
 }
 
 Core::~Core() {
@@ -28,31 +30,33 @@ Core::~Core() {
 }
 
 Renderer* Core::getRenderer() const {
+    if (m_renderer == nullptr)
+        Debug::warning("Returning nullptr in Core.getRenderer()");
     return m_renderer;
+}
+
+void Core::init() {
+    if (m_renderer->isActive()) {
+        m_renderer->requestFocus();
+        
+        if (m_world) {
+            m_renderer->setDrawTransform(true);
+            m_renderer->setDrawTransform(m_world->getMap()->getWidth(), m_world->getMap()->getHeight());
+        }
+    }    
 }
 
 void Core::start() {
     if (m_isRunning)
         return;
     
-	try {
-		m_world = new World(new Map("1"));
-		Tank* t = new Tank(10, 5, new Polygon("tank_1"));
-		t->setPos({40, 40});
-		t->setRotDeg(15);
-		m_world->addTank(t);
-		
-		if (m_renderer->isActive()) {
-			m_renderer->requestFocus();
-			m_renderer->setDrawTransform(true);
-			m_renderer->setDrawTransform(m_world->getMap()->getWidth(), m_world->getMap()->getHeight());
-		}
-		
-		run();
-	} catch (const std::exception& e) {
-		Debug::error(e.what());
-		stop();
-	}
+    try {		
+        init();
+        run();
+    } catch (const std::exception& e) {
+        Debug::error(e.what());
+        stop();
+    }
 }
 
 void Core::stop() {
@@ -65,61 +69,63 @@ void Core::stop() {
 void Core::run() {
     m_isRunning = true;
 
-	int frames = 0;
-	double fpsTime = 0;
-	double fpsRefreshTime = 1.0;
+    int frames = 0;
+    double fpsTime = 0;
+    double fpsRefreshTime = 1.0;
 
-	double prevTime = Time::getTime();
-	double frameTime = 1.0 / (double)m_fpsLimit;
-	double unprocessedTime = 0;
+    double prevTime = Time::getTime();
+    double frameTime = 1.0 / (double)m_fpsLimit;
+    double unprocessedTime = 0;
 
-	while (m_isRunning && m_renderer->isActive()) {
-		double curTime = Time::getTime();
-		double passedTime = curTime - prevTime;
+    while (m_isRunning) {
+        double curTime = Time::getTime();
+        double passedTime = curTime - prevTime;
 
-		unprocessedTime += passedTime;
-		fpsTime += passedTime;
+        unprocessedTime += passedTime;
+        fpsTime += passedTime;
 
-		bool needUpdate = false;
+        bool needUpdate = false;
         double updateTime = 0.;
 
-		if (unprocessedTime >= frameTime) {
-			updateTime = frameTime * (int)floor(unprocessedTime / frameTime);
-			unprocessedTime -= updateTime;
+        if (unprocessedTime >= frameTime) {
+            updateTime = frameTime * (int)floor(unprocessedTime / frameTime);
+            unprocessedTime -= updateTime;
 
-			needUpdate = true;
-		}
+            needUpdate = true;
+        }
 
-		if (fpsTime >= fpsRefreshTime) {
-			// Debug::info("%.1f fps", frames / fpsTime);
-			fpsTime -= fpsRefreshTime;
-			frames = 0;
-		}
+        if (fpsTime >= fpsRefreshTime) {
+            // Debug::info("%.1f fps", frames / fpsTime);
+            fpsTime -= fpsRefreshTime;
+            frames = 0;
+        }
 
-		if (needUpdate) {
-			if (m_renderer->getInput()->getKeyboardKeyState(Input::Keyboard::A))
-            	m_world->getTanks()[0]->rotate(updateTime);
-            
-			if (m_renderer->isActive()) {
-				m_renderer->input();
-				m_renderer->update();
-			}		
-			
+        if (needUpdate) {
             if (m_renderer->isActive()) {
-                m_renderer->clear();   
-                m_renderer->draw(m_world);
+                m_renderer->input();
+                m_renderer->update();
+            }
+            
+            update(updateTime);
+            
+            if (m_renderer->isActive()) {
+                m_renderer->clear();
+                
+                if (m_world)
+                    m_renderer->draw(m_world);
                 // m_renderer->draw(m_interface);
+                
                 m_renderer->display();
             }
             
-			frames++;
-		}
-		else {
-			std::this_thread::sleep_for(std::chrono::milliseconds(1));
-		}
+            frames++;
+        }
+        else {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        }
         
-		prevTime = curTime;
-	}
-	
-	m_isRunning = false;
+        prevTime = curTime;
+    }
+    
+    m_isRunning = false;
 }

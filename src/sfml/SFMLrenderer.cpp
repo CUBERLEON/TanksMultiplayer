@@ -67,6 +67,7 @@ void SFMLrenderer::destroyWindow() {
 
 void SFMLrenderer::setSettings(short antialiasing, bool apply) {
     m_active = false;
+    
     m_antialiasing = antialiasing;
 
     if (apply)

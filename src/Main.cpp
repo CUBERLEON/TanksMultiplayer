@@ -43,13 +43,14 @@ void process_command(std::string text) {
         if (command == "exit") {
             exit(0);
         } else if (command == "create") {
-            Core* core = new ServerCore();
+            ServerCore* core = new ServerCore(5000);
             core->getRenderer()->setSettings(2);
             core->getRenderer()->createWindow(900, 600, "Tanks - Host");
             core->start();
             delete core;
         } else if (command == "connect") {
-            Core* core = new ClientCore();
+            ClientCore* core = new ClientCore("192.168.0.101", 5000);
+            core->connect("player1");
             core->getRenderer()->setSettings(2);
             core->getRenderer()->createWindow(900, 600, "Tanks - Client");
             core->start();

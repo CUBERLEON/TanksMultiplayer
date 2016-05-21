@@ -1,7 +1,9 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
-class Input {
+#include "sys/ISerializable.hpp"
+
+class Input : public ISerializable{
 public:
     enum Keyboard {
         A = 0,
@@ -16,15 +18,20 @@ public:
         MOUSE_CNT
     };
     
+    Input();
+    Input(const json& r);
     virtual ~Input();
     
     int getKeyboardKeyState(unsigned int key) const { return m_keyboard[key]; }
     int getMouseKeyState(unsigned int key) const { return m_mouse[key]; }
+    
+    json serialize() const override;
 protected:
-    Input();
-
     int* m_keyboard;
     int* m_mouse;
+    
+    bool deserialize(const json& r) override;
+    void reset();
 private:
 };
 

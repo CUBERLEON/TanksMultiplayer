@@ -2,7 +2,7 @@
 #define CORE_HPP
 
 class Renderer;
-// class NetworkManager;
+class NetworkMgr;
 class World;
 
 class Core {
@@ -14,8 +14,6 @@ public:
     
     void start();
     void stop();
-    
-    virtual void sync() = 0;
 protected:
     Core();
     
@@ -24,11 +22,14 @@ protected:
     Renderer* m_renderer;
     int m_fpsLimit;
     
-    // NetworkManager* m_nManager;
+    NetworkMgr* m_network;
     
     World* m_world;
     // Interface* m_interface;
+    
+    virtual void update(float updateTime) = 0;
 private:
+    void init();
     void run();
 };
 
