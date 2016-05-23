@@ -5,15 +5,17 @@
 #include <string>
 #include <map>
 #include "sys/IDrawable.hpp"
+#include "sys/ISerializable.hpp"
 
 class Block;
 class Renderer;
 
-class Map : public IDrawable {
+class Map : public IDrawable, public ISerializable {
 public:
     Map(const Map& r);
-    Map(float width, float height);
+    // Map(float width, float height);
     Map(const std::string& fileName);
+    Map(const json& r);
     virtual ~Map();
     
     float getWidth() const { return m_width; }
@@ -32,6 +34,9 @@ public:
     virtual void draw(Renderer* renderer) override;
     
     static void freeLoaded();
+    
+    virtual json serialize() const override;
+    virtual bool deserialize(const json& r) override;
 protected:
 private:
     float m_width;

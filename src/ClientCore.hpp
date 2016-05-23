@@ -2,10 +2,9 @@
 #define CLIENT_CORE_HPP
 
 #include <string>
+#include <thread>
 #include "Core.hpp"
 #include <SFML/Network.hpp>
-#include <json/json.hpp>
-using json=nlohmann::json;
 
 #define TCP_MAX_LENGTH 20000
 
@@ -17,7 +16,8 @@ public:
     void connect(const std::string& name);
     void disconnect();
 protected:
-    virtual void update(float updateTime) override;
+    virtual void lowRateUpdate(float updateTime) override;
+    virtual void highRateUpdate(float updateTime) override;
 private:
     bool m_isConnected;
     
@@ -27,6 +27,12 @@ private:
     
     sf::TcpSocket* m_tcpSocket;
     sf::UdpSocket* m_udpSocket;
+    
+    std::thread* m_tcpCommunicatorThread;
+    bool m_isTcpCommunicatorRunning;
+    void startTcpCommunicator();
+    void stopTcpCommunicator();
+    void tcpCommunicator();
     
     bool send(const json& r);
     bool receive(json& r);

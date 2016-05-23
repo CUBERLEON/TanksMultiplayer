@@ -9,7 +9,10 @@ SFMLinput::SFMLinput()
 SFMLinput::~SFMLinput()
 {}
 
-void SFMLinput::update() {
+void SFMLinput::update(const sf::RenderWindow* window) {
+    if (!window->hasFocus())
+        return;
+    
     for (unsigned int i = 0; i < Keyboard::KEYBOARD_CNT; ++i) {
         m_keyboard[i] = sf::Keyboard::isKeyPressed((sf::Keyboard::Key)toSFMLKeyboardKey(i));
         // if (m_keyboard[i])

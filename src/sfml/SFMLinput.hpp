@@ -2,6 +2,7 @@
 #define SFML_INPUT_HPP
 
 #include "../Input.hpp"
+#include <SFML/Graphics.hpp>
 
 class SFMLrenderer;
 
@@ -12,7 +13,7 @@ public:
     virtual ~SFMLinput();
 protected:
 private:
-    void update();
+    void update(const sf::RenderWindow* window);
     
     int toSFMLKeyboardKey(int key);
     int toSFMLMouseButton(int key);

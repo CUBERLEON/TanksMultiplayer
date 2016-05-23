@@ -1,8 +1,10 @@
 #ifndef CORE_HPP
 #define CORE_HPP
 
+#include <json/json.hpp>
+using json=nlohmann::json;
+
 class Renderer;
-class NetworkMgr;
 class World;
 
 class Core {
@@ -22,12 +24,17 @@ protected:
     Renderer* m_renderer;
     int m_fpsLimit;
     
-    NetworkMgr* m_network;
+    int m_lowRateUpdateLimit;
+    int m_sleepTime;
     
     World* m_world;
     // Interface* m_interface;
     
-    virtual void update(float updateTime) = 0;
+    virtual void lowRateUpdate(float updateTime) = 0;
+    virtual void highRateUpdate(float updateTime) = 0;
+    
+    void setWorld(World* world);
+    void setWorld(const json& r);
 private:
     void init();
     void run();

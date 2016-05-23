@@ -26,11 +26,11 @@ public:
     int getMouseKeyState(unsigned int key) const { return m_mouse[key]; }
     
     json serialize() const override;
+    bool deserialize(const json& r) override;
 protected:
     int* m_keyboard;
     int* m_mouse;
     
-    bool deserialize(const json& r) override;
     void reset();
 private:
 };

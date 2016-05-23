@@ -8,11 +8,12 @@
 
 std::map<std::string, Polygon*> Polygon::m_loaded;
 
-Polygon::Polygon(const Polygon& r) {
+Polygon::Polygon(const Polygon& r)
+{
     copy(r);
 }
 
-Polygon::Polygon(std::string fileName)
+Polygon::Polygon(const std::string& fileName)
 : m_fileName(fileName)
 {
     if (m_loaded.count(fileName)) {
@@ -27,9 +28,8 @@ Polygon::Polygon(const std::vector< std::pair<float, float> >& points)
 : m_points(points), m_fileName("")
 {}
 
-Polygon::~Polygon() {
-    
-}
+Polygon::~Polygon()
+{}
 
 bool Polygon::isIntersecting(const std::pair<float, float>& a, const std::pair<float, float>& b) const {
     for (unsigned i = 0; i < m_points.size(); ++i) {
@@ -48,6 +48,34 @@ void Polygon::freeLoaded() {
         m_loaded.erase(i->first);
         delete tmp;
     }
+}
+
+json Polygon::serialize() const {
+    json r;
+    if (m_fileName != "") {
+        r["file_name"] = m_fileName;
+    } else {
+        r["points"] = json::array();
+        for (unsigned int i = 0; i < m_points.size(); ++i)
+            r["points"][i] = { m_points[i].first, m_points[i].second };
+    }
+    return r;
+}
+
+bool Polygon::deserialize(const json& r) {
+    try {
+        if (r.count("file_name")) {
+            copy(Polygon(r["file_name"].get<std::string>()));
+        } else {
+            m_points.clear();
+            for (unsigned int i = 0; i < r["points"].size(); ++i)
+                m_points.push_back({r["points"][0], r["points"][1]});
+        }
+    } catch (const std::exception& e) {
+        Debug::error(e.what());
+        return false;
+    }
+    return true;
 }
 
 void Polygon::loadFromFile(std::string filePath) {

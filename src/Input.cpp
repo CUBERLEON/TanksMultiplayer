@@ -27,10 +27,10 @@ Input::~Input() {
 json Input::serialize() const {
     json r;
     r["keyboard"] = json::array();
-    r["mouse"] = json::array();
     for (unsigned int i = 0; i < Keyboard::KEYBOARD_CNT; ++i)
         if (m_keyboard[i])
             r["keyboard"].push_back(i);
+    r["mouse"] = json::array();
     for (unsigned int i = 0; i < Mouse::MOUSE_CNT; ++i)
         if (m_mouse[i])
             r["mouse"].push_back(i);

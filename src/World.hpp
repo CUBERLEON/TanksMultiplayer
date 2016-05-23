@@ -3,15 +3,17 @@
 
 #include <vector>
 #include "sys/IDrawable.hpp"
+#include "sys/ISerializable.hpp"
 
 class Map;
 class Tank;
 class Bullet;
 class Renderer;
 
-class World : public IDrawable {
+class World : public IDrawable, public ISerializable {
 public:
     World(Map* map);
+    World(const json& r);
     virtual ~World();
     
     const std::vector<Tank*>& getTanks() const;
@@ -25,6 +27,9 @@ public:
     
     void update(float time);
     virtual void draw(Renderer* renderer) override;
+    
+    virtual json serialize() const override;
+    virtual bool deserialize(const json& r) override;
 protected:
 private:
     Map* m_map;

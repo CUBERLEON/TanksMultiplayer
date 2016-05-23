@@ -6,6 +6,7 @@
 #include "Block.hpp"
 #include "Renderer.hpp"
 #include "sys/IPositionable.hpp"
+#include "sys/Debug.hpp"
 
 std::map< std::string, Map* > Map::m_loaded;
 
@@ -14,9 +15,9 @@ Map::Map(const Map& r)
     copy(r);
 }
 
-Map::Map(float width, float height)
-: m_width(width), m_height(height), m_fileName("")
-{}
+// Map::Map(float width, float height)
+// : m_width(width), m_height(height), m_fileName("")
+// {}
 
 Map::Map(const std::string& fileName)
 {
@@ -26,6 +27,14 @@ Map::Map(const std::string& fileName)
     } else {
         loadFromFile(MAPS_PATH + fileName + ".mp");
         m_loaded[fileName] = new Map(*this);
+    }
+}
+
+Map::Map(const json& r)
+{
+    if (!deserialize(r)) {
+        throw std::runtime_error("Couldn't initialize Map from json data");
+        exit(1);
     }
 }
 
@@ -53,6 +62,31 @@ void Map::freeLoaded() {
         m_loaded.erase(i->first);
         delete tmp;
     }
+}
+
+json Map::serialize() const {
+    json r;
+    // if (m_fileName != "") {
+    r["file_name"] = m_fileName;
+    // } else {
+    //     r["width"] = m_width;
+    //     r["height"] = m_height;
+    //     for (unsigned int i = 0; i < m_blocks.size(); ++i)
+    //         r["blocks"][i] = m_blocks[i].serialize();
+    //     for (unsigned int i = 0; i < m_spawns.size(); ++i)
+    //         r["spawns"][i] = { m_spawns[i].first, m_spawns[i].second };
+    // }
+    return r;
+}
+
+bool Map::deserialize(const json& r) {
+    try {
+        copy(Map(r["file_name"].get<std::string>()));
+    } catch (const std::exception& e) {
+        Debug::error(e.what());
+        return false;
+    }
+    return true;
 }
 
 void Map::loadFromFile(const std::string& filePath) {
@@ -94,7 +128,11 @@ void Map::loadFromFile(const std::string& filePath) {
 void Map::copy(const Map& r) {
     m_width = r.getWidth();
     m_height = r.getHeight();
-    m_blocks = r.getBlocks();
+    for (unsigned int i = 0; i < m_blocks.size(); ++i)
+        delete m_blocks[i];
+    m_blocks.clear();
+    for (unsigned int i = 0; i < r.getBlocks().size(); ++i)
+        m_blocks.push_back(new Block(*r.getBlocks()[i]));
     m_spawns = r.getSpawns();
     m_fileName = r.getFileName();
 }

@@ -17,6 +17,7 @@ public:
     // };
     
     Block(bool isBulletProof, bool isPassable, Polygon* shape);
+    Block(const Block& r);
     virtual ~Block();
         
     bool isBulletProof() const { return m_isBulletProof; }
@@ -26,9 +27,12 @@ public:
     
     // virtual int getType() const = 0;
 protected:
+    Block();
 private:
     bool m_isBulletProof;
     bool m_isPassable;
+    
+    void copy(const Block& r);
 };
 
 #endif

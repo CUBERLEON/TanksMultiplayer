@@ -2,6 +2,7 @@
 #define PLAYER_HPP
 
 #include <string>
+#include <thread>
 #include <SFML/Network.hpp>
 #include <json/json.hpp>
 using json = nlohmann::json;
@@ -23,12 +24,10 @@ public:
     unsigned short getPort() const { return m_port; }
     bool isConnected() const { return m_isConnected; }
     
-    void sync(const World* world);
+    void process(const json& r);
     
     bool send(const json& r);
     bool receive(json& r);
-    bool udpSend(const json& r);
-    bool udpReceive(json& r);
 protected:
 private:
     std::string m_name;
@@ -38,9 +37,12 @@ private:
     unsigned short m_port;
     
     sf::TcpSocket* m_tcpSocket;
-    sf::UdpSocket* m_udpSocket;
     
     bool m_isConnected;
+    
+    std::thread* m_tcpCommunicatorThread;
+    bool m_isTcpCommunicatorRunning;
+    void tcpCommunicator();
 };
 
 #endif

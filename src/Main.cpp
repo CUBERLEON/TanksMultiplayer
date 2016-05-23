@@ -13,6 +13,7 @@
 void process_command(std::string text);
 
 int main() {
+    srand(time(0));
     try {
         std::string text;
         while (true) {
@@ -50,7 +51,7 @@ void process_command(std::string text) {
             delete core;
         } else if (command == "connect") {
             ClientCore* core = new ClientCore("192.168.0.101", 5000);
-            core->connect("player1");
+            core->connect("player" + std::to_string(rand() % 100));
             core->getRenderer()->setSettings(2);
             core->getRenderer()->createWindow(900, 600, "Tanks - Client");
             core->start();

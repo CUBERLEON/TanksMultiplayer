@@ -1,8 +1,8 @@
 CC=g++
 CXX=g++
 CXXFLAGS=-std=c++11 -Wall -Wextra -Ilibs/include -DSFML_STATIC -DSFML
-LDFLAGS=-static-libgcc -static-libstdc++
-LDLIBS=-lsfml-graphics-s -lsfml-window-s -lsfml-network-s -lsfml-system-s
+LDFLAGS=-static-libgcc -static-libstdc++ -static -lpthread
+LDLIBS=-lsfml-graphics-s -lsfml-window-s -lsfml-network-s -lsfml-system-s -pthread
 ifeq ($(OS),Windows_NT)
 	LDFLAGS+=-Llibs/lib/windows
 	LDLIBS+=-lfreetype -ljpeg -lwinmm -lgdi32 -lopengl32 -lws2_32
@@ -14,9 +14,9 @@ endif
 vpath %.o obj
 vpath %.cpp src
 
-src_sfml=SFMLrenderer.cpp SFMLinput.cpp SFMLnetworkMgr.cpp
+src_sfml=SFMLrenderer.cpp SFMLinput.cpp
 src_sys=Utils.cpp Time.cpp Polygon.cpp
-src_main=Main.cpp Map.cpp Tank.cpp Block.cpp World.cpp Bullet.cpp Renderer.cpp Input.cpp Core.cpp ServerCore.cpp ClientCore.cpp Player.cpp NetworkMgr.cpp
+src_main=Main.cpp Map.cpp Tank.cpp Block.cpp World.cpp Bullet.cpp Renderer.cpp Input.cpp Core.cpp ServerCore.cpp ClientCore.cpp Player.cpp
 # src_main+=BrickBlock.cpp WaterBlock.cpp
 
 src_sfml:=$(addprefix src/sfml/, $(src_sfml))

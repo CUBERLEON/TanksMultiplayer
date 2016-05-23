@@ -5,11 +5,12 @@
 #include <string>
 #include <map>
 #include <utility>
+#include "ISerializable.hpp"
 
-class Polygon {
+class Polygon : public ISerializable {
 public:
     Polygon(const Polygon& r);
-    Polygon(std::string fileName);
+    Polygon(const std::string& fileName);
     Polygon(const std::vector< std::pair<float, float> >& points);
     ~Polygon();
     
@@ -19,6 +20,9 @@ public:
     const std::string& getFileName() const { return m_fileName; }
     
     static void freeLoaded();
+    
+    virtual json serialize() const override;
+    virtual bool deserialize(const json& r) override;
 protected:
     std::vector< std::pair<float, float> > m_points;
 private:

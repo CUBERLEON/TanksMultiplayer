@@ -41,7 +41,7 @@ void SFMLrenderer::update() {
 }
 
 void SFMLrenderer::input() {
-    ((SFMLinput*)m_input)->update();
+    ((SFMLinput*)m_input)->update(m_window);
     
     sf::Event event;
     while (m_active && m_window->pollEvent(event)) {
@@ -57,7 +57,7 @@ void SFMLrenderer::input() {
 void SFMLrenderer::destroyWindow() {
     if (!m_active)
         return;
-        
+    
     m_active = false;
     if (m_window != nullptr) {
         m_window->close();
