@@ -12,10 +12,11 @@ class Polygon;
 
 class Tank : public IMovable, public IDrawable, public ICollidable, public ISerializable {
 public:
-    Tank(float enginePower, float maxSpeed, Polygon* shape);
+    Tank(const std::string& playerName, float enginePower, float maxSpeed, Polygon* shape);
     Tank(const json& r);
     virtual ~Tank();
     
+    const std::string& getPlayerName() const { return m_playerName; }
     float getEnginePower() const { return m_enginePower; }
     float getMaxSpeed() const { return m_maxSpeed; }
     int getLevel() const { return m_level; }
@@ -27,6 +28,8 @@ public:
 protected:
     Tank();
 private:
+    std::string m_playerName;
+
     float m_enginePower;
     float m_maxSpeed;
     

@@ -21,11 +21,6 @@ ServerCore::ServerCore(unsigned short port)
         startAcceptingNewPlayers();
         
         setWorld(new World(new Map(std::string("default"))));
-        
-        Tank* t = new Tank(10, 5, new Polygon("tank_1"));
-        t->setPos({40, 40});
-        t->setRotDeg(15);
-        m_world->addTank(t);
     } catch (const std::exception& e) {
         m_udpSocket->unbind();
         stopAcceptingNewPlayers();
@@ -83,9 +78,16 @@ void ServerCore::lowRateUpdate(float updateTime) {
     }
     
     for (auto i = m_players.begin(); i != m_players.end(); ++i) {
-        if (i->second->getInput()->getKeyboardKeyState(Input::Keyboard::A))
-            // i->second->getTank()->rotate(updateTime);
-            m_world->getTanks()[0]->rotate(updateTime);
+        Input* input = i->second->getInput();
+        Tank* tank = i->second->getTank();
+        if (input->getKeyboardKeyState(Input::Keyboard::A))
+            tank->rotate(updateTime*1.5);
+        if (input->getKeyboardKeyState(Input::Keyboard::D))
+            tank->rotate(-updateTime*1.5);
+        if (input->getKeyboardKeyState(Input::Keyboard::W))
+            tank->move(rotate<float, float>({0., 1.}, tank->getRot()) * -updateTime*20);
+        if (input->getKeyboardKeyState(Input::Keyboard::S))
+            tank->move(rotate<float, float>({0., 1.}, tank->getRot()) * updateTime*20);
     }
     
     for (auto i = m_players.begin(); i != m_players.end(); ++i) {
@@ -109,6 +111,7 @@ void ServerCore::highRateUpdate(float updateTime) {
 }
 
 void ServerCore::newPlayersListener() {
+    srand(time(0));
     while (m_isAcceptingNewPlayers) {
         try {
             sf::TcpSocket* socket = new sf::TcpSocket;
@@ -143,7 +146,14 @@ void ServerCore::newPlayersListener() {
 bool ServerCore::addPlayer(Player* player) {
     if (!m_players.count(player->getName())) {
         if (player->send({{"type", "connection"}, {"status", 1}, {"msg", "Success"}})) {
+            
+            Tank* tank = new Tank(player->getName(), 10, 5, new Polygon("tank_1"));
+            tank->setPos({ rand()%(int)m_world->getMap()->getWidth(), rand()%(int)m_world->getMap()->getHeight() });
+            m_world->addTank(tank);
+            
+            player->setTank(tank);
             m_players[player->getName()] = player;
+            
             Debug::info("Player '" + player->getName() + "' connected");
             
             return true;
@@ -155,6 +165,7 @@ bool ServerCore::addPlayer(Player* player) {
 
 void ServerCore::removePlayer(const std::string& name) {
     m_players.erase(m_players.find(name));
+    m_world->removeTank(name);
 }
 
 bool ServerCore::udpSend(const json& r, const std::string& ip, unsigned short port) {

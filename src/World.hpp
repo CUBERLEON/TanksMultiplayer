@@ -17,10 +17,14 @@ public:
     virtual ~World();
     
     const std::vector<Tank*>& getTanks() const;
+    Tank* getTank(const std::string& playerName) const;
     const std::vector<Bullet*>& getBullets() const;
     Map* getMap() const;
+    
     void addTank(Tank* tank);
     void addBullet(Bullet* bullet);
+    
+    void removeTank(const std::string& playerName);
     
     // void setUpdateTime(float time) { m_updateTime = time; }
     // float getCurTime() const { return m_curTime; }

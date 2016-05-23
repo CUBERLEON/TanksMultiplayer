@@ -4,8 +4,8 @@
 #include "sys/Polygon.hpp"
 #include "sys/Debug.hpp"
 
-Tank::Tank(float enginePower, float maxSpeed, Polygon* shape)
-: IMovable({0, 0}, {0, 0}, 0), ICollidable(shape), m_enginePower(enginePower), m_maxSpeed(maxSpeed), m_health(100), m_level(1)
+Tank::Tank(const std::string& playerName, float enginePower, float maxSpeed, Polygon* shape)
+: IMovable({0, 0}, {0, 0}, 0), ICollidable(shape), m_playerName(playerName), m_enginePower(enginePower), m_maxSpeed(maxSpeed), m_health(100), m_level(1)
 {}
 
 Tank::Tank(const json& r)
@@ -30,6 +30,7 @@ void Tank::draw(Renderer* renderer) {
 
 json Tank::serialize() const {
     json r;
+    r["player_name"] = m_playerName;
     r["engine_power"] = m_enginePower;
     r["max_speed"] = m_maxSpeed;
     r["health"] = m_health;
@@ -44,6 +45,7 @@ json Tank::serialize() const {
 
 bool Tank::deserialize(const json& r) {
     try {
+        m_playerName = r["player_name"];
         m_enginePower = r["engine_power"];
         m_maxSpeed = r["max_speed"];
         m_health = r["health"];

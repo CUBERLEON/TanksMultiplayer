@@ -27,6 +27,14 @@ World::~World() {
         delete m_bullets[i];
 }
 
+Tank* World::getTank(const std::string& playerName) const {
+    for (unsigned int i = 0; i < m_tanks.size(); ++i) {
+        if (m_tanks[i]->getPlayerName() == playerName)
+            return m_tanks[i];
+    }
+    return nullptr;
+}
+
 const std::vector<Tank*>& World::getTanks() const {
     return m_tanks;
 }
@@ -45,6 +53,13 @@ void World::addTank(Tank* tank) {
 
 void World::addBullet(Bullet* bullet) {
     m_bullets.push_back(bullet);
+}
+
+void World::removeTank(const std::string& playerName) {
+    for (unsigned int i = 0 ; i < m_tanks.size(); ++i) {
+        if (m_tanks[i]->getPlayerName() == playerName)
+            m_tanks.erase(m_tanks.begin() + i);
+    }
 }
 
 void World::update(float time) {

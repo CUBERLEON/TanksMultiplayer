@@ -11,6 +11,7 @@ using json = nlohmann::json;
 
 class Input;
 class World;
+class Tank;
 
 class Player {
 public:
@@ -19,6 +20,8 @@ public:
     
     const std::string& getName() const { return m_name; }
     Input* getInput() const;
+    Tank* getTank() const;
+    void setTank(Tank* tank);
     
     const std::string& getIp() const { return m_ip; }
     unsigned short getPort() const { return m_port; }
@@ -32,6 +35,7 @@ protected:
 private:
     std::string m_name;
     Input* m_input;
+    Tank* m_tank;
 
     std::string m_ip;
     unsigned short m_port;

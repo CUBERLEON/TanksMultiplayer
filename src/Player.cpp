@@ -2,11 +2,12 @@
 
 #include "Input.hpp"
 #include "World.hpp"
+#include "Tank.hpp"
 #include "sys/Debug.hpp"
 
 Player::Player(const std::string& name, sf::TcpSocket* socket)
-: m_name(name), m_input(new Input()), m_ip(socket->getRemoteAddress().toString()), m_port(socket->getRemotePort()), 
-  m_tcpSocket(socket), m_isConnected(true), m_tcpCommunicatorThread(nullptr), m_isTcpCommunicatorRunning(false)
+: m_name(name), m_input(new Input()), m_tank(nullptr),
+  m_ip(socket->getRemoteAddress().toString()), m_port(socket->getRemotePort()), m_tcpSocket(socket), m_isConnected(true), m_tcpCommunicatorThread(nullptr), m_isTcpCommunicatorRunning(false)
 {
     m_isTcpCommunicatorRunning = true;
     m_tcpCommunicatorThread = new std::thread(&Player::tcpCommunicator, this);
@@ -18,12 +19,20 @@ Player::~Player()
     m_isTcpCommunicatorRunning = false;
     m_tcpCommunicatorThread->join();
     delete m_tcpCommunicatorThread;
-    delete m_input;
+    delete m_input; 
     delete m_tcpSocket;
 }
 
 Input* Player::getInput() const {
     return m_input;
+}
+
+Tank* Player::getTank() const {
+    return m_tank;
+}
+
+void Player::setTank(Tank* tank) {
+    m_tank = tank;
 }
 
 void Player::process(const json& r) {
