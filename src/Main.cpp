@@ -44,13 +44,22 @@ void process_command(std::string text) {
         if (command == "exit") {
             exit(0);
         } else if (command == "create") {
-            ServerCore* core = new ServerCore(5000);
+            unsigned short port = 5000;
+            if (args.size() >= 1)
+                port = std::atoi(args[0].c_str());
+            ServerCore* core = new ServerCore(port);
             core->getRenderer()->setSettings(2);
             core->getRenderer()->createWindow(900, 600, "Tanks - Host");
             core->start();
             delete core;
         } else if (command == "connect") {
-            ClientCore* core = new ClientCore("192.168.0.101", 5000);
+            std::string ip = "127.0.0.1";
+            unsigned short port = 5000;
+            if (args.size() >= 2) {
+                ip = args[0];
+                port = std::atoi(args[1].c_str());
+            }
+            ClientCore* core = new ClientCore(ip, port);
             core->connect("player" + std::to_string(rand() % 100));
             core->getRenderer()->setSettings(2);
             core->getRenderer()->createWindow(900, 600, "Tanks - Client");
